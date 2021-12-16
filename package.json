@@ -1,0 +1,18 @@
+{
+  "name": "5pamoka",
+  "version": "1.0.0",
+  "description": "Book lsit in front and end",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/server.js"
+  },
+  "author": "Elvinasu",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.3.0"
+  }
+}
