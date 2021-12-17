@@ -1,7 +1,10 @@
 const express = require('express');
+const cors = require('cors')
+const bodyParser = require('body-parser');
 const app = express();
 const mysql = require('mysql2');
 
+// database
 const db = mysql.createPool({
 
    host:	"localhost",
@@ -10,17 +13,39 @@ const db = mysql.createPool({
    password:   "root",
    database: "usersdatadb"
 })
+//middleware
+app.use(cors())
+app.use(express.json())
+app.use(bodyParser.urlencoded({extended:true}))
 
-app.get("/", (req,res) =>{
-const sql =`
-INSERT INTO users (name,age, email, password) VALUES ('jonas', 20, 'jonas@gmail.com','123abc')
+// routes
+app.get("/getUsers", (req,res) =>{
+    const name = req.body.name
+    const age = req.body.age
+    const email = req.body.email
+    const password = req.body.password
+    const sql = "SELECT * FROM users "
 
-`
-   db.query(sql, (err,result)=>{
-      res.send("hello")
-   })
+    ;
+    db.query(sql,  (err,result)=>{
+        console.log(result)
+        res.send(result)
+    })
+
 
 });
+app.post('/addUser', (req,res)=>{
+    const name = req.body.name
+    const age = req.body.age
+    const email = req.body.email
+    const password = req.body.password
+    const sql = "INSERT INTO users (name, age, email, password) VALUES (?,?,?,?)"
+
+  ;
+   db.query(sql, [name, age, email, password], (err,result)=>{
+       console.log(err)
+   })
+})
 app.listen(5000,()=>{
    console.log("server running on port 5000")
 })
