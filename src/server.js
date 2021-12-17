@@ -19,7 +19,7 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
 // routes
-app.get("/getUsers", (req,res) =>{
+app.get("/get-users", (req,res) =>{
     const name = req.body.name
     const age = req.body.age
     const email = req.body.email
@@ -34,7 +34,7 @@ app.get("/getUsers", (req,res) =>{
 
 
 });
-app.post('/addUser', (req,res)=>{
+app.post('/add-user', (req,res)=>{
     const name = req.body.name
     const age = req.body.age
     const email = req.body.email
@@ -45,6 +45,16 @@ app.post('/addUser', (req,res)=>{
    db.query(sql, [name, age, email, password], (err,result)=>{
        console.log(err)
    })
+})
+app.delete('/delete-user/:name', (req,res)=>{
+    const name = req.params.name
+    const sql = "DELETE FROM users WHERE name = ? "
+        db.query(sql, name, (err,result)=>{
+
+        })
+
+    ;
+
 })
 app.listen(5000,()=>{
    console.log("server running on port 5000")
