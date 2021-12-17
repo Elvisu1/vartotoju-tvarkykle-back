@@ -1,25 +1,27 @@
 const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors');
-
-const mysql = require('mysql2/promise');
-// const dbConfig = require('./dbConfig');
-
-// routes
-// const booksRoute = require('./API/books');
-// const booksCatRoute = require('./API/booksCategories');
-
-const PORT = process.env.SERVER_PORT || 3000;
-
 const app = express();
+const mysql = require('mysql2');
 
-// middleware
-app.use(morgan('common'));
-app.use(cors());
-app.use(express.json());
+const db = mysql.createPool({
 
-app.get('/', async (req, res) => {
-   res.send('hello')
+   host:	"localhost",
+   port:	3306,
+   user:	"root",
+   password:   "root",
+   database: "usersdatadb"
+})
+
+app.get("/", (req,res) =>{
+const sql =`
+INSERT INTO users (name,age, email, password) VALUES ('jonas', 20, 'jonas@gmail.com','123abc')
+
+`
+   db.query(sql, (err,result)=>{
+      res.send("hello")
+   })
+
 });
+app.listen(5000,()=>{
+   console.log("server running on port 5000")
+})
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
