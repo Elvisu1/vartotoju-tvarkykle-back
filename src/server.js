@@ -19,6 +19,9 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
 // routes
+
+// show all users
+
 app.get("/get-users", (req,res) =>{
     const name = req.body.name
     const age = req.body.age
@@ -34,6 +37,9 @@ app.get("/get-users", (req,res) =>{
 
 
 });
+
+// add user
+
 app.post('/add-user', (req,res)=>{
     const name = req.body.name
     const age = req.body.age
@@ -46,6 +52,9 @@ app.post('/add-user', (req,res)=>{
        console.log(err)
    })
 })
+
+// delete user
+
 app.delete('/delete-user/:name', (req,res)=>{
     const name = req.params.name
     const sql = "DELETE FROM users WHERE name = ? "
@@ -56,6 +65,20 @@ app.delete('/delete-user/:name', (req,res)=>{
     ;
 
 })
+// update user
+// app.put('/update-user', (req,res)=>{
+//     const name = req.params.name
+//     const age = req.params.age
+//     const email = req.params.email
+//     const password = req.params.password
+//     const sql = "UPDATE SET users (name, age, email, password) VALUES (?,?,?,?) "
+//     db.query(sql, [name, age, email, password], (err,result)=>{
+//
+//     })
+//
+//     ;
+//
+// })
 app.listen(5000,()=>{
    console.log("server running on port 5000")
 })
