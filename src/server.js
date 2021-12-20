@@ -3,6 +3,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser');
 const app = express();
 const mysql = require('mysql2');
+const bcrypt = require('bcrypt')
 
 // database
 const db = mysql.createPool({
@@ -40,15 +41,16 @@ app.get("/get-users", (req,res) =>{
 
 // add user
 
-app.post('/add-user', (req,res)=>{
+app.post('/add-user', async (req,res)=>{
     const name = req.body.name
     const age = req.body.age
     const email = req.body.email
     const password = req.body.password
+    const hash = await bcrypt.hash(password, 5)
     const sql = "INSERT INTO users (name, age, email, password) VALUES (?,?,?,?)"
 
   ;
-   db.query(sql, [name, age, email, password], (err,result)=>{
+  await db.query(sql, [name, age, email, hash], (err,result)=>{
        console.log(err)
    })
 })
@@ -66,19 +68,17 @@ app.delete('/delete-user/:name', (req,res)=>{
 
 })
 // update user
-// app.put('/update-user', (req,res)=>{
-//     const name = req.params.name
-//     const age = req.params.age
-//     const email = req.params.email
-//     const password = req.params.password
-//     const sql = "UPDATE SET users (name, age, email, password) VALUES (?,?,?,?) "
-//     db.query(sql, [name, age, email, password], (err,result)=>{
-//
-//     })
-//
-//     ;
-//
-// })
+app.put('/update-user', (req,res) =>{
+    const name = req.params.name;
+    const sqlUpdate = "UPDATE users SET name = ? WHERE (age = ?, email = ?, password = ?)";
+    db.query(sqlUpdate,[name], (err,result)=>{
+
+    })
+
+
+
+
+});
 app.listen(5000,()=>{
    console.log("server running on port 5000")
 })
